@@ -21,9 +21,9 @@ var listCmd = &cobra.Command{
 			id, err := strconv.Atoi(arg)
 
 			if err != nil {
-				fmt.Printf("error processing id \"%s\" \n", arg)
+				fmt.Println("Failed to parse the argument: ", arg)
 			} else {
-				ids = append(ids, id)	
+				ids = append(ids, id)
 			}
 		}
 		fmt.Println(ids)
