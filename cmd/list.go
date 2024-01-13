@@ -5,8 +5,9 @@ package cmd
 
 import (
 	"fmt"
-	"strconv"
+	"os"
 
+	"github.com/KhNikh/task/db"
 	"github.com/spf13/cobra"
 )
 
@@ -16,17 +17,19 @@ var listCmd = &cobra.Command{
 	Short: "Lists all your tasks",
 
 	Run: func(cmd *cobra.Command, args []string) {
-		var ids []int
-		for _, arg := range args {
-			id, err := strconv.Atoi(arg)
-
-			if err != nil {
-				fmt.Println("Failed to parse the argument: ", arg)
-			} else {
-				ids = append(ids, id)
-			}
+		tasks, err := db.AllTasks()
+		if err != nil {
+			fmt.Println("Something went wrong: ", err)
+			os.Exit(1)
 		}
-		fmt.Println(ids)
+		if len(tasks) == 0 {
+			fmt.Println("You have no tasks to complete. Enjoy !!!")
+			return
+		}
+		fmt.Println("You have the following tasks to complete")
+		for i, task := range tasks {
+			fmt.Printf("%d. %s \n", i+1, task.Value)
+		}
 	},
 }
 
